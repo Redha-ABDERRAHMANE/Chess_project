@@ -1,5 +1,5 @@
 #define Delais 1000  // Délai en millisecondes
-#define GPIO1 D11
+#define GPIO1 D11 
 #define GPIO2 D10
 #define GPIO3 D9
 #define GPIO4 D6
@@ -51,6 +51,7 @@ void desactiverBobine(int Port) {
 }
 
 void setBobine(int Port, char Etat) {
+    
     switch (Etat) {
         case 'A':  // Si l'état est 'A', activer la bobine
             activerBobine(Port);
