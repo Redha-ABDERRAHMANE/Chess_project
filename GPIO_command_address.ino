@@ -3,17 +3,19 @@
 #define GPIO2 D10
 #define GPIO3 D9
 #define GPIO4 D6
+#define NB_BOBINE 4  // Nombre de bobines
 
-int GPIO[5] = {-1,GPIO1, GPIO2, GPIO3, GPIO4};
+int GPIO[5] = {-1, GPIO1, GPIO2, GPIO3, GPIO4};
 
 // Déclaration des fonctions
 void setBobine(int Port, char Etat);
-void activerBobine(int Port);
-void desactiverBobine(int Port);
+void activerBobine(unsigned char address);
+void desactiverBobine(unsigned char address);
+bool safeAccessGPIO(int index);
 
 void setup() {
     Serial.begin(9600);  // Commencer la connexion série avec 9600 bauds
-    for (int i = 1; i < 5; i++) {
+    for (int i = 1; i <= NB_BOBINE; i++) {
         pinMode(GPIO[i], OUTPUT);  // Configurer les GPIO comme sorties
     }
 }
@@ -21,7 +23,6 @@ void setup() {
 void loop() {
     if (Serial.available() > 0) {  // Vérifie s'il y a des données sur l'interface série
         String receivedData = Serial.readString();  // Lire les données comme une chaîne de caractères
-
 
         // Extraire le premier caractère comme état
         char Next_etat = receivedData[0];
@@ -34,7 +35,6 @@ void loop() {
         Serial.print("Next_etat: ");
         Serial.println(Next_etat);
 
-
         // Attendre un délai avant d'exécuter la commande
         delay(Delais);
 
@@ -43,28 +43,47 @@ void loop() {
     }
 }
 
-void activerBobine(int Port) {
-    digitalWrite(GPIO[Port], HIGH);  // Activer la bobine (HIGH)
+bool safeAccessGPIO(int index) {
+    if (index >= 1 && index <= NB_BOBINE) {
+        return true;
+    } else {
+        Serial.println("Invalid GPIO access!");
+        return false;
+    }
 }
 
-void desactiverBobine(int Port) {
-    digitalWrite(GPIO[Port], LOW);  // Désactiver la bobine (LOW)
+void activerBobine(unsigned char address) {
+    unsigned char  portIndex= address & 0x3F;  // Extraire le port
+    if (safeAccessGPIO(portIndex)) {
+        digitalWrite(GPIO[portIndex], HIGH);  // Activer la bobine (HIGH)
+    }
+}
+
+void desactiverBobine(unsigned char address) {
+    unsigned char portIndex = address & 0x3F;  // Extraire le port
+    if (safeAccessGPIO(portIndex)) {
+        digitalWrite(GPIO[portIndex], LOW);  // Desactiver la bobine (LOW)
+    }
 }
 
 void setBobine(int Port, char Etat) {
-    
+    unsigned char address = 0;  // Déclarer la variable en dehors du switch
+
     switch (Etat) {
-        unsigned char address=0 ;   //une variable adresse où le bit de poid fort est le bit enable (HIGH/LOW) et le reste des bits sont les bits pour designer le port
         case 'A':  // Si l'état est 'A', activer la bobine
-            address=(1<<7 )|Port;
-            activerBobine(address &3F);
+            address = (1 << 7) | (Port & 0x3F);  // Masquage pour s'assurer que Port est sur 6 bits
+            activerBobine(address);
             break;
+
         case 'D':  // Si l'état est 'D', désactiver la bobine
-            address|=Port;
-            
-            desactiverBobine(address &3F);
+            address |= (Port & 0x3F);  // Masquage pour s'assurer que Port est sur 6 bits
+
+            desactiverBobine(address);
             break;
+
         default:
-            break;  // Ne rien faire si l'état est invalide
+            // Ne rien faire si l'état est invalide
+            Serial.println("Invalid state!");
+            break;
     }
 }
