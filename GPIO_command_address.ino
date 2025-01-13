@@ -34,6 +34,7 @@ void loop() {
         Serial.print("Next_etat: ");
         Serial.println(Next_etat);
 
+
         // Attendre un délai avant d'exécuter la commande
         delay(Delais);
 
@@ -53,11 +54,15 @@ void desactiverBobine(int Port) {
 void setBobine(int Port, char Etat) {
     
     switch (Etat) {
+        unsigned char address=0 ;   //une variable adresse où le bit de poid fort est le bit enable (HIGH/LOW) et le reste des bits sont les bits pour designer le port
         case 'A':  // Si l'état est 'A', activer la bobine
-            activerBobine(Port);
+            address=(1<<7 )|Port;
+            activerBobine(address &3F);
             break;
         case 'D':  // Si l'état est 'D', désactiver la bobine
-            desactiverBobine(Port);
+            address|=Port;
+            
+            desactiverBobine(address &3F);
             break;
         default:
             break;  // Ne rien faire si l'état est invalide
