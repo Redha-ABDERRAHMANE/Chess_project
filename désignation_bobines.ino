@@ -10,9 +10,11 @@
 //Elle retourne une adresse de 7 bits.
 
 
-int setAddress(int address, bool d) {
+void setAddress(unsigned char address, bool d) {
 
-    //Ajouter l'état D dans le bit de poids le plus fort (bit 6)
+    address &= 0x7F; //on force le bit 7 à 0 puisque unsigned char est codé sur un octet = 8bits; ce bit est inutilisé
+
+    //Ajouter l'état D dans le bit 6
      if (d) {
         address |= 0x40;  // Mettre le bit 6 à 1 si D = 1 (bobine allumée)
     } else {
@@ -28,10 +30,10 @@ int setAddress(int address, bool d) {
     digitalWrite(A5_PIN, (address & 0x10) >> 4); // Bit 4 à la broche A5_PIN
     digitalWrite(A6_PIN, (address & 0x20) >> 5); // Bit 5 à la broche A6_PIN
 
-    
-    // Retourner l'adresse complète (7 bits)
-    return address;
 }
+
+
+//D_PIN est le signal de contrôle qui indique si la bobine doit être alimentée (HIGH) ou coupée (LOW).
 
 void activerBobine() {
     digitalWrite(D_PIN, HIGH);  // Allumer la bobine sélectionnée
@@ -40,6 +42,7 @@ void activerBobine() {
 void desactiverBobine() {
     digitalWrite(D_PIN, LOW);  // Éteindre la bobine sélectionnée
 }
+
 
 
 
