@@ -32,5 +32,5 @@ void setBobine(int address, char Etat) {
             break;
         default:
             Serial.println("Commande invalide !");
-            break;
-    }
+        break;
+    }
