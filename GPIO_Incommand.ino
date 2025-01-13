@@ -13,7 +13,7 @@ void desactiverBobine(int Port);
 
 void setup() {
     Serial.begin(9600);  // Commencer la connexion série avec 9600 bauds
-    for (int i = 0; i < 4; i++) {
+    for (int i = 1; i < 5; i++) {
         pinMode(GPIO[i], OUTPUT);  // Configurer les GPIO comme sorties
     }
 }
@@ -22,11 +22,17 @@ void loop() {
     if (Serial.available() > 0) {  // Vérifie s'il y a des données sur l'interface série
         String receivedData = Serial.readString();  // Lire les données comme une chaîne de caractères
 
+
         // Extraire le premier caractère comme état
         char Next_etat = receivedData[0];
 
         // Extraire le reste comme numéro de port (int)
         int Port = receivedData.substring(1).toInt();
+        Serial.print("Port: ");
+        Serial.println(Port);
+
+        Serial.print("Next_etat: ");
+        Serial.println(Next_etat);
 
         // Attendre un délai avant d'exécuter la commande
         delay(Delais);
