@@ -5,6 +5,7 @@
 #define GPIO2 D10
 #define GPIO3 D9
 #define GPIO4 D6
+#define GPIO7 D8 // Pin de d
 
 int GPIO[9] = {GPIO1, GPIO2, GPIO3, GPIO4, GPIO5, GPIO6, GPIO7, GPIO8};
 
@@ -40,11 +41,11 @@ void setAddress(unsigned char address, bool d) {
 //D_PIN est le signal de contrôle qui indique si la bobine doit être alimentée (HIGH) ou coupée (LOW).
 
 void activerBobine() {
-    digitalWrite(GPIO[6], HIGH);  // Allumer la bobine sélectionnée
+    digitalWrite(GPIO[7], HIGH);  // Allumer la bobine sélectionnée
 }
 
 void desactiverBobine() {
-    digitalWrite(GPIO[6], LOW);  // Éteindre la bobine sélectionnée
+    digitalWrite(GPIO[7], LOW);  // Éteindre la bobine sélectionnée
 }
 
 
@@ -64,5 +65,28 @@ void setBobine(int address, char Etat) {
         default:
             Serial.println("Commande invalide !");
             break;
+    }
+}
+
+void loop() {
+    if (Serial.available() > 0) {  // Vérifie s'il y a des données sur l'interface série
+        String receivedData = Serial.readString();  // Lire les données comme une chaîne de caractères
+
+        // Extraire le premier caractère comme état
+        char Next_etat = receivedData[0];
+
+        // Extraire le reste comme numéro de port (int)
+        int Port = receivedData.substring(1).toInt();
+        Serial.print("Port: ");
+        Serial.println(Port);
+
+        Serial.print("Next_etat: ");
+        Serial.println(Next_etat);
+
+        // Attendre un délai avant d'exécuter la commande
+        delay(Delais);
+
+        // Appeler la fonction setBobine
+        setBobine(Port, Next_etat);
     }
 }
