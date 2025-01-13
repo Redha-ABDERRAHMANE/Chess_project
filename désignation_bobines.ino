@@ -2,7 +2,6 @@
 
 
 
-//Fonction qui donne une valeur à chacun des 6 bits en fonction des 
 void setAddress(int address) {
     // Configurer les broches a1 à a6 en fonction de l'adresse (6 bits)
     digitalWrite(A1_PIN, (address & 0x01));      // Bit 0
