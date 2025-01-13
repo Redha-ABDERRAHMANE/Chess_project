@@ -30,8 +30,17 @@ int setAddress(int address, bool d) {
 
     
     // Retourner l'adresse complète (7 bits)
-    return adress;
+    return address;
 }
+
+void activerBobine() {
+    digitalWrite(D_PIN, HIGH);  // Allumer la bobine sélectionnée
+}
+
+void desactiverBobine() {
+    digitalWrite(D_PIN, LOW);  // Éteindre la bobine sélectionnée
+}
+
 
 
 
