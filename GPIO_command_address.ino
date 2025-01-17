@@ -9,8 +9,8 @@ int GPIO[5] = {-1, GPIO1, GPIO2, GPIO3, GPIO4};
 
 // Déclaration des fonctions
 void setBobine(int Port, char Etat);
-void activerBobine(unsigned char address);
-void desactiverBobine(unsigned char address);
+void activerBobine(unsigned char message);
+void desactiverBobine(unsigned char message);
 bool safeAccessGPIO(int index);
 
 void setup() {
@@ -52,33 +52,33 @@ bool safeAccessGPIO(int index) {
     }
 }
 
-void activerBobine(unsigned char address) {
-    unsigned char  portIndex= address & 0x3F;  // Extraire le port
+void activerBobine(unsigned char message) {
+    unsigned char  portIndex= message & 0x3F;  // Extraire le port
     if (safeAccessGPIO(portIndex)) {
         digitalWrite(GPIO[portIndex], HIGH);  // Activer la bobine (HIGH)
     }
 }
 
-void desactiverBobine(unsigned char address) {
-    unsigned char portIndex = address & 0x3F;  // Extraire le port
+void desactiverBobine(unsigned char message) {
+    unsigned char portIndex = message & 0x3F;  // Extraire le port
     if (safeAccessGPIO(portIndex)) {
         digitalWrite(GPIO[portIndex], LOW);  // Desactiver la bobine (LOW)
     }
 }
 
 void setBobine(int Port, char Etat) {
-    unsigned char address = 0;  // Déclarer la variable en dehors du switch
+    unsigned char message = 0;  // Déclarer la variable en dehors du switch
 
     switch (Etat) {
         case 'A':  // Si l'état est 'A', activer la bobine
-            address = (1 << 7) | (Port & 0x3F);  // Masquage pour s'assurer que Port est sur 6 bits
-            activerBobine(address);
+            message = (1 << 7) | (Port & 0x3F);  // Masquage pour s'assurer que Port est sur 6 bits
+            activerBobine(message);
             break;
 
         case 'D':  // Si l'état est 'D', désactiver la bobine
-            address |= (Port & 0x3F);  // Masquage pour s'assurer que Port est sur 6 bits
+            message |= (Port & 0x3F);  // Masquage pour s'assurer que Port est sur 6 bits
 
-            desactiverBobine(address);
+            desactiverBobine(message);
             break;
 
         default:
