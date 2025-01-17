@@ -8,8 +8,24 @@
 #define GPIO5 D7
 #define GPIO6 D6
 #define GPIO7 D5 // Pin de d
+#define GPIO8 D4
 
 int GPIO[9] = {GPIO1, GPIO2, GPIO3, GPIO4, GPIO5, GPIO6, GPIO7, GPIO8};
+
+void setup() {
+    // Initialiser la communication série
+    Serial.begin(9600);  // Vitesse de communication série (modifiable selon vos besoins)
+
+    // Configurer les broches comme sorties
+    for (int i = 0; i < 8; i++) {  // GPIO0 à GPIO7 (D11 à D4)
+        pinMode(GPIO[i], OUTPUT);
+        digitalWrite(GPIO[i], LOW);  // Assurez-vous que toutes les broches sont initialisées à LOW
+    }
+
+    Serial.println("System Initialized");  // Message pour vérifier que le système démarre
+}
+
+
 
 
 //Fonction qui donne une valeur à chacun des 6 bits en fonction de l'adresse saisie
