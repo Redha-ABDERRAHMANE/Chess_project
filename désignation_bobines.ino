@@ -4,8 +4,10 @@
 #define GPIO1 D11 
 #define GPIO2 D10
 #define GPIO3 D9
-#define GPIO4 D6
-#define GPIO7 D8 // Pin de d
+#define GPIO4 D8
+#define GPIO5 D7
+#define GPIO6 D6
+#define GPIO7 D5 // Pin de d
 
 int GPIO[9] = {GPIO1, GPIO2, GPIO3, GPIO4, GPIO5, GPIO6, GPIO7, GPIO8};
 
