@@ -40,10 +40,15 @@ void setAddress(unsigned char address, bool d) {
 
 //D_PIN est le signal de contrôle qui indique si la bobine doit être alimentée (HIGH) ou coupée (LOW).
 
+//sets d to 1
+//quand l'enable de la première bobine est à 1 c'est la bobine 1 qui est allumée car en=1 et d=1 alors que les autres enable (des autres bobines) sont etteintes 
+//enable d'une bobine est à 1 lorsque les GPIO de la bobine voulue sont sélectionnées cad quand on suit le chemin vers la bobine via les mux (exemple 000000 pour la premiere cad tous les GPIO sont à 0)
+
 void activerBobine() {
     digitalWrite(GPIO[7], HIGH);  // Allumer la bobine sélectionnée
 }
 
+//sets d to 0
 void desactiverBobine() {
     digitalWrite(GPIO[7], LOW);  // Éteindre la bobine sélectionnée
 }
