@@ -24,7 +24,7 @@ void loop() {
     int port;
     char Etat;
 
-    for(int i=0, i<GPIO.size();i++){
+    for(int i=1, i<GPIO.size();i++){
 
         // Appeler la fonction setBobine
         setBobine(GPIO[i], 'A');
@@ -35,6 +35,18 @@ void loop() {
 
         Serial.print("Next_etat: ");
         Serial.println('A');
+
+        // Attendre un délai avant d'exécuter la commande
+        delay(Delais);
+        // Appeler la fonction setBobine
+        setBobine(GPIO[i], 'D');
+
+ 
+        Serial.print("Port: ");
+        Serial.println(Port);
+
+        Serial.print("Next_etat: ");
+        Serial.println('D');
 
         // Attendre un délai avant d'exécuter la commande
         delay(Delais);
