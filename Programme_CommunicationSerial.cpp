@@ -53,18 +53,11 @@ int main(void)
     unsigned char messageToSend ; // messageToSend a envoyer (unsigned char)
 
 
-
-
-
-
-
-
-
     // 1. Ouvrir le port COM
     // Le prefixe "\\\\.\\COM1" est necessaire pour pouvoir ouvrir un port serie 
     // sous Windows lorsqu'on utilise CreateFile.
     hSerial = CreateFileA(
-        "\\\\.\\COM5",               // Nom du port (a adapter a votre configuration)
+        "\\\\.\\COM7",               // Nom du port (a adapter a votre configuration)
         GENERIC_READ | GENERIC_WRITE,// Acces en lecture et ecriture
         0,                           // Partage non autorise
         NULL,                        // Securite par defaut

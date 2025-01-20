@@ -5,7 +5,7 @@
 #define GPIO4 D6
 #define NB_BOBINE 4  // Nombre de bobines
 
-int GPIO[5] = {-1, GPIO1, GPIO2, GPIO3, GPIO4};
+int GPIO[5] = {-1, GPIO1, GPIO2, GPIO3, GPIO4} ;
 
 // Déclaration des fonctions
 void setBobine(int Port, char Etat);
