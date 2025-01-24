@@ -74,28 +74,40 @@ void Vue::on_button_afficher_clicked() {
 }
 
 void Vue::on_case_selected(int x, int y) {
-    if (grille.selectionnerCase(x, y, selected_x, selected_y, is_selected)) {
-        std::cout << "premier clique: " << std::endl;
-    } else {
-        if (grille.deplacerPieceSiPossible(x, y, selected_x, selected_y, is_selected)) {
-            vueInitialiser();
-            grille.dessinerToutesLesPieces(); // Redessiner toutes les pièces après déplacement
-        }
-        is_selected = false;
-        std::cout << "deuxième clique: " << std::endl;
-    }
+	static bool first = true;
+	static int fx, fy;
+	
+	if(!is_selected){
+	    if (first) {
+		fx = x;
+		fy = y;
+		std::cout << "premier clique: (" << x << ", " << y << ") => " << this->grille.position(x , y) << std::endl;
+	    } else {
+		if (grille.deplacerPieceSiPossible(x, y, fx, fy)) {
+		    vueInitialiser();
+		    grille.dessinerToutesLesPieces(); // Redessiner toutes les pièces après déplacement
+		}
+	//        is_selected = false;
+		std::cout << "deuxième clique: (" << x << ", " << y << ")" <<this->grille.position(x , y) <<std::endl;
+	        std::cout << "result: " <<this->grille.movement(this->grille.position(fx, fy), this->grille.position(x , y))<<std::endl;
+	    }
+	    first = !first;
+	 }else{
 
-    if (grille.ajouterPieceSiSelectionnee(x, y, selected_piece)) {
-        vueInitialiser();
-        grille.dessinerToutesLesPieces(); // Redessiner toutes les pièces après ajout d'une nouvelle pièce
-        is_selected = false;
-        selected_piece = "";
-    }
+	    if (grille.ajouterPieceSiSelectionnee(x, y, selected_piece)) {
+		vueInitialiser();
+		grille.dessinerToutesLesPieces(); // Redessiner toutes les pièces après ajout d'une nouvelle pièce
+		is_selected = false;
+		selected_piece = "";
+	    }
+	 }
+    
 }
 
 
 void Vue::on_piece_button_clicked(const std::string& piece_type) {
     selected_piece = piece_type; // Enregistrer le type de la pièce sélectionnée
+    is_selected = true;
 }
 
 void Vue::on_button_initialiser_clicked() {
@@ -158,6 +170,9 @@ void Vue::dessinerToutesLesPieces() {
     }
 }
 */
+
+
+
 void Vue::vueInitialiser(){
     // Effacer toutes les images actuelles
     for (auto& entry : piece_images_) {
