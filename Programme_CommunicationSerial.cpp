@@ -17,7 +17,7 @@ std::string UserInput(){
 }
 unsigned char EncodeMessage(const std::string& dataToSend) {
     unsigned char messageToSend = 0;
-    int NumBobine= std::stoi(dataToSend.substr(1)) & 0x7F;
+    //int NumBobine= std::stoi(dataToSend.substr(1)) & 0x7F;
 
     switch (dataToSend[0]) {
         case 'A':  // Activate the coil
