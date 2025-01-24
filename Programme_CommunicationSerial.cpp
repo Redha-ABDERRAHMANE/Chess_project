@@ -17,6 +17,7 @@ std::string UserInput(){
 }
 unsigned char EncodeMessage(const std::string& dataToSend) {
     unsigned char messageToSend = 0;
+    int NumBobine= std::stoi(dataToSend.substr(1)) & 0x7F;
 
     switch (dataToSend[0]) {
         case 'A':  // Activate the coil
@@ -137,9 +138,7 @@ while(messageUser!="C"){
     // On s'assure de terminer la chaîne reçue par un caractere nul
     readBuffer[bytesRead] = '\0';
     printf("Reponse reçue: %s\n", readBuffer);
-
-
-
+    
 }
 
     // 6. Fermer le port

@@ -1,14 +1,18 @@
 
 
 #define Delais 1000  // Délai en millisecondes
+// Pin D2 .. D5 : index de la bobine
+// Pin D6 D7 : donnee de selection pour MUX1
+// Pin D8: non utilisé
+//Pin D9 : prochaine etat de la bobine(activee,desactivee) D
 #define GPIO1 D2 
 #define GPIO2 D3
 #define GPIO3 D4
 #define GPIO4 D5
 #define GPIO5 D6
 #define GPIO6 D7
-#define GPIO7 D8 // Pin de d
-#define GPIO8 D9
+#define GPIO7 D8 
+#define GPIO8 D9 // Pin de D
 
 int GPIO[9] = {GPIO1, GPIO2, GPIO3, GPIO4, GPIO5, GPIO6, GPIO7, GPIO8};
 
@@ -57,13 +61,16 @@ void activerBroche(unsigned char message) {
 
 void desactiverBroche() {
 
-    // GPIO[0] et GPIO[1] correspond aux broches de selections du premier MUX 
-    // GPIO [2.. 5] correspondent au numero de la bobine
-    //GPIO[6] inutilise
+    // On evite d'utiliser des boucles pour reduire la complexite du code a executer sur la carte STM32
+
+    // GPIO [0.. 3] correspondent au numero de la bobine
+    // GPIO[4] et GPIO[5] correspond aux broches de selections du premier MUX 
+    //GPIO[6] inutilisee
     // GPIO[7] utiliser pour indiquer le prochain etat de la bobine (pour activer ou desactiver)
 
     // Configurer les broches a1 à a6 en fonction de l'adresse (6 bits)
-    digitalWrite(GPIO[0], LOW);      //Envoie le Bit 0 du message à la broche GPIO[0] 
+
+    digitalWrite(GPIO[0], LOW);  //Envoie le Bit 0 du message à la broche GPIO[0] 
     digitalWrite(GPIO[1], LOW); // Bit 1 à la broche GPIO[1]
     digitalWrite(GPIO[2], LOW); // Bit 2 à la broche GPIO[2]
     digitalWrite(GPIO[3], LOW); // Bit 3 à la broche GPIO[3]
