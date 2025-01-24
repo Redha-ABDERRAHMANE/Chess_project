@@ -115,15 +115,15 @@ bool Grille::selectionnerCase(int x, int y, int& selected_x, int& selected_y, bo
     return false;
 }
 
-bool Grille::deplacerPieceSiPossible(int x, int y, int selected_x, int selected_y, bool is_selected) {
-    if (is_selected) {
+bool Grille::deplacerPieceSiPossible(int x, int y, int selected_x, int selected_y) {
+ 
         Piece piece = getPiece(selected_x, selected_y);
         Piece destinationPiece = getPiece(x, y);
         if (destinationPiece.getNom() == "Vide") {
             deplacerPiece(x, y, piece, selected_x, selected_y);
             return true;
         }
-    }
+    
     return false;
 }
 
@@ -204,8 +204,7 @@ bool Grille::on_button_press_event(GdkEventButton *event)
     // Afficher les indices de la case cliquée sur la console
     std::cout << "Case cliquée : Ligne  " << row << ", Colonne " << col << std::endl;
     
-    std::cout<<"Number : "<<Grille::position(event)<<std::endl;
-    
+   
     // Émettre le signal de sélection de case
     m_signal_case_selected.emit(row, col);
 
@@ -213,37 +212,28 @@ bool Grille::on_button_press_event(GdkEventButton *event)
     return true;
 }
 
-int Grille::position(GdkEventButton *event){
-    double x = event->x;
-    double y = event->y;
-
-    // Calculer les indices de ligne et de colonne dans la grille
-    int col = static_cast<int>(x) / getCellSize();
-    int row = static_cast<int>(y) / getCellSize();
-    int p=1;
+unsigned int Grille::position(unsigned int row, unsigned int col){
+    
+    unsigned int p=1;
     if((row==1)||(row==2)||(row==4)||(row==5))
     p=(row/3+1)*4+row*3+(row%3?col/3+1:col+1);
     else
     p=(row/3)*4+row*3+(row%3?col/3+1:col+1);
     return p;
-   }
+ }
    
- unsigned char* Grille::movement(GdkEventButton *event,int x, int y,int selected_x, int selected_y, bool is_selected){
+ unsigned char* Grille::movement(unsigned int fromPos, unsigned int toPos){
 
    static unsigned char result[2];
    
-   if (selectionnerCase(x, y, selected_x, selected_y, is_selected)) {
-           result[0] = static_cast<unsigned char> (position(event));
-        
-    } else {
-        
-        is_selected = false;
-        result[1] = static_cast<unsigned char> (position(event));
-        }
-        
-        std::cout << "tab : " <<result<<std::endl;
-        
-        return result;
+   result[0] = fromPos;
+   
+   result[1] = toPos;
+      
+       
+       
+   // TODO: call the UART library function to actually move the piece 
+   return result;
         
 }
 
@@ -286,5 +276,8 @@ Gdk::RGBA Grille::getYellowColor() const {
     yellow.set_rgba(1.0, 1.0, 0.0, 0.5); // Jaune transparent
     return yellow;
 }
+
+
+
 
 
