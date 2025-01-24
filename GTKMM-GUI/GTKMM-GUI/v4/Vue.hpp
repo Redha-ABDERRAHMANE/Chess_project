@@ -1,3 +1,4 @@
+
 #pragma once
 #include <gtkmm.h>
 #include <gtkmm/window.h>
@@ -28,6 +29,7 @@ private:
 public:
     Vue(int rows,int cols,int cell_size);
     virtual ~Vue();
+    unsigned char* movement(GdkEventButton *event,int x, int y,int selected_x, int selected_y, bool is_selected);
 
 protected:
     void on_button_quit_clicked();
