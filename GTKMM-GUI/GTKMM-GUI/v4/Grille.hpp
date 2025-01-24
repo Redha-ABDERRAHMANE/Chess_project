@@ -42,6 +42,7 @@ public:
     bool ajouterPieceSiSelectionnee(int x, int y, const std::string& selected_piece);
     void dessinerToutesLesPieces();
     int position(GdkEventButton *event);
+    unsigned char* movement(GdkEventButton *event,int x, int y,int selected_x, int selected_y, bool is_selected);
     
     // Signaux
     sigc::signal<void, const std::string&, int, int> signal_dessiner_piece;
