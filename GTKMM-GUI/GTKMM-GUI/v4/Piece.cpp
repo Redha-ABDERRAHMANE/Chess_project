@@ -49,6 +49,8 @@ std::string Piece::trouverNomParIdentifiant(const std::string& id) const {
         return "Tour";
     if (id == "Cavalier")
         return "Cavalier";
+    if (id == "Fou")
+        return "Fou";
     if (id == "Pion")
         return "Pion";
     // Ajouter des correspondances supplémentaires pour d'autres pièces si nécessaire
