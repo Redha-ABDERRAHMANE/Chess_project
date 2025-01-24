@@ -38,11 +38,11 @@ public:
     typedef sigc::signal<void, int, int> type_signal_case_selected;
     type_signal_case_selected signal_case_selected();
     bool selectionnerCase(int x, int y, int& selected_x, int& selected_y, bool& is_selected);
-    bool deplacerPieceSiPossible(int x, int y, int selected_x, int selected_y, bool is_selected);
+    bool deplacerPieceSiPossible(int x, int y, int selected_x, int selected_y);
     bool ajouterPieceSiSelectionnee(int x, int y, const std::string& selected_piece);
     void dessinerToutesLesPieces();
-    int position(GdkEventButton *event);
-    unsigned char* movement(GdkEventButton *event,int x, int y,int selected_x, int selected_y, bool is_selected);
+    unsigned int position(unsigned int row, unsigned int col);
+    unsigned char* movement(unsigned int fromPos, unsigned int toPos);
     
     // Signaux
     sigc::signal<void, const std::string&, int, int> signal_dessiner_piece;
