@@ -202,9 +202,10 @@ bool Grille::on_button_press_event(GdkEventButton *event)
     int row = static_cast<int>(y) / getCellSize();
 
     // Afficher les indices de la case cliquée sur la console
-    std::cout << "Case cliquée : Ligne  subu" << row << ", Colonne " << col << std::endl;
+    std::cout << "Case cliquée : Ligne  " << row << ", Colonne " << col << std::endl;
     
     std::cout<<"Number : "<<Grille::position(event)<<std::endl;
+    
     // Émettre le signal de sélection de case
     m_signal_case_selected.emit(row, col);
 
@@ -219,39 +220,36 @@ int Grille::position(GdkEventButton *event){
     // Calculer les indices de ligne et de colonne dans la grille
     int col = static_cast<int>(x) / getCellSize();
     int row = static_cast<int>(y) / getCellSize();
-    int p;
-    if(row==0)
-    	p = col+1;
-    if(row==1&&col==0)
-        p= 8;
-     if(row==1&&col==3)
-        p= 9;  
-     if(row==1&&col==6)
-        p= 10;
-     if(row==2&&col==0)
-        p= 11;
-     if(row==2&&col==3)
-        p= 12;
-     if(row==2&&col==6)
-        p= 13;
-     if(row==3)
-       p=14+col;
-     if(row==4&&col==0)
-        p=21 ;
-     if(row==4&&col==3)
-        p= 22;
-     if(row==4&&col==6)
-        p= 23;
-     if(row==5&&col==0)
-        p= 24;
-     if(row==5&&col==3)
-        p= 25;
-     if(row==5&&col==6)
-        p= 26;
-     if(row==6)
-        p=27+col;
-    return p;}
-    
+    int p=1;
+    if((row==1)||(row==2)||(row==4)||(row==5))
+    p=(row/3+1)*4+row*3+(row%3?col/3+1:col+1);
+    else
+    p=(row/3)*4+row*3+(row%3?col/3+1:col+1);
+    return p;
+   }
+   
+ unsigned char* Grille::movement(GdkEventButton *event,int x, int y,int selected_x, int selected_y, bool is_selected){
+
+   static unsigned char result[2];
+   
+   if (selectionnerCase(x, y, selected_x, selected_y, is_selected)) {
+           result[0] = static_cast<unsigned char> (position(event));
+        
+    } else {
+        
+        is_selected = false;
+        result[1] = static_cast<unsigned char> (position(event));
+        }
+        
+        std::cout << "tab : " <<result<<std::endl;
+        
+        return result;
+        
+}
+
+        
+        
+        
 Grille::type_signal_case_selected Grille::signal_case_selected()
 {
     return m_signal_case_selected;
