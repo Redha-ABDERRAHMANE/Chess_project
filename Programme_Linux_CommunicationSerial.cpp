@@ -44,7 +44,7 @@ int main() {
     unsigned char messageToSend;
 
     // 1. Open the serial port
-    serialPort = open("/dev/ttyS0", O_RDWR | O_NOCTTY | O_SYNC);
+    serialPort = open("/dev/ttyACM0", O_RDWR | O_NOCTTY | O_SYNC);
     if (serialPort < 0) {
         perror("Error: Unable to open the serial port");
         return 1;
