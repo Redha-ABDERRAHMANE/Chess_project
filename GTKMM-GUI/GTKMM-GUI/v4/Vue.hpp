@@ -6,6 +6,8 @@
 #include <gtkmm/box.h>
 #include "Grille.hpp"
 #include <map>
+
+
 class Vue : public Gtk::Window
 {
 private:

@@ -92,12 +92,13 @@ void loop() {
         Serial.println();
 
         Serial.print("Next_etat: ");
-        Serial.write(Next_etat&0x3);
+        Serial.println(Next_etat & 0x3, BIN);
+
 
         //Extraire numero de la bobine 
 
         Serial.print("MUX 2: ");
-        Serial.println(Next_etat&0x3C);
+        Serial.println(Next_etat&0x3C, BIN);
 
 
         // Attendre un délai avant d'exécuter la commande
