@@ -86,19 +86,8 @@ void loop() {
 
         // Extraire le premier caractère comme état
         unsigned char Next_etat = receivedData>>7;
+          Serial.print(receivedData);
 
-        // Extraire la donnee de selection pour MUX 1
-        Serial.print("MUX1: ");
-        Serial.println();
-
-        Serial.print("Next_etat: ");
-        Serial.println(Next_etat & 0x3, BIN);
-
-
-        //Extraire numero de la bobine 
-
-        Serial.print("MUX 2: ");
-        Serial.println(Next_etat&0x3C, BIN);
 
 
         // Attendre un délai avant d'exécuter la commande

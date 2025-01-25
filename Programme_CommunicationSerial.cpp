@@ -1,16 +1,4 @@
-#include <windows.h> // Include Windows-specific header for serial communication
-
-#include <iostream>
-#include <fcntl.h>
-
-#include <unistd.h>
-#include <cstring>
-#include<vector>
-#include <algorithm>
-
-#include <chrono>
-#include <thread>
-
+#include "ClassCommunicationSerial.hpp"
 
 unsigned char EncodeMessage(const unsigned char dataToSend,unsigned char Etat) {
     unsigned char messageToSend = 0;

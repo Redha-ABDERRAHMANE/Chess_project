@@ -1,7 +1,7 @@
 #include "Grille.hpp"
 #include <iostream>
 Grille::Grille(int r, int c, int cellSize)
-    : rows(r), cols(c), grid(r, std::vector<Case>(c, Case())), cellSize(cellSize)
+    :  rows(r), cols(c), grid(r, std::vector<Case>(c, Case())), cellSize(cellSize)
 {
     set_size_request(cols * cellSize, rows * cellSize);
 
@@ -233,6 +233,8 @@ unsigned int Grille::position(unsigned int row, unsigned int col){
        
        
    // TODO: call the UART library function to actually move the piece 
+
+   CommunicationObject.CommunicationSerie(result);
    return result;
         
 }
