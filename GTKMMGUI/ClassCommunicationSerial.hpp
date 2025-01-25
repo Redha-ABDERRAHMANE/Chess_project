@@ -32,14 +32,15 @@ public:
                 // Open the serial port
 
     hSerial = CreateFileA(
-        "\\\\.\\COM12",                  // Name of the COM port
-        GENERIC_READ | GENERIC_WRITE,    // Access mode: read and write
-        0,                               // Share mode: none
-        NULL,                            // Security attributes: default
-        OPEN_EXISTING,                   // Open an existing COM port
-        0,                               // No special file attributes
-        NULL                             // No template file
+        "\\\\.\\COM2",
+        GENERIC_READ | GENERIC_WRITE,
+        0,
+        NULL,
+        OPEN_EXISTING,
+        0,
+        NULL
     );
+
 
     if (hSerial == INVALID_HANDLE_VALUE) {
         DWORD errorCode = GetLastError();
@@ -54,8 +55,8 @@ public:
 
         // Exit or handle the error gracefully
         return;
+    }
         
-        }
         this->dcbSerialParams.DCBlength = sizeof(this->dcbSerialParams);
         this->dcbSerialParams.BaudRate = CBR_9600;  // Baud rate: 9600
         this->dcbSerialParams.ByteSize = 8;        // Data bits: 8

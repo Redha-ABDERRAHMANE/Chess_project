@@ -52,7 +52,7 @@ int CommunicationSerie(unsigned char* UserInput) {
 
         // Open the serial port
         hSerial = CreateFileA(
-        "\\\\.\\COM12",               // Nom du port (a adapter a votre configuration)
+        "\\\\.\\COM2",               // Nom du port (a adapter a votre configuration)
         GENERIC_READ | GENERIC_WRITE,// Acces en lecture et ecriture
         0,                           // Partage non autorise
         NULL,                        // Securite par defaut
