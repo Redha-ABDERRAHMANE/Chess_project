@@ -1,9 +1,4 @@
-#include <windows.h> // Include Windows-specific header for serial communication
-#include <iostream>
-#include <vector>
-#include <algorithm>
-#include <chrono>
-#include <thread>
+#include "ClassCommunicationSerial.hpp"
 
 unsigned char EncodeMessage(const unsigned char dataToSend,unsigned char Etat) {
     unsigned char messageToSend = 0;
@@ -136,16 +131,4 @@ int CommunicationSerie(unsigned char* UserInput) {
     }
 
     return 0;
-}
-
-int main() {
-
-
-    unsigned char userI[2];
-    userI[0]= (unsigned char ) 1;
-    userI[1]= (unsigned char ) 2;
-
-
-    CommunicationSerie(userI);
- 
 }

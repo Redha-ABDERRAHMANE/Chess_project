@@ -6,7 +6,7 @@
 #include <sigc++/sigc++.h>
 #include "Piece.hpp"
 #include "Case.hpp" // Inclure la définition de Case
-#include "../../../ClassCommunicationSerial.hpp"
+#include "ClassCommunicationSerial.hpp"
 
 class Grille : public Gtk::DrawingArea , public ClassCommunicationSerial
 {
