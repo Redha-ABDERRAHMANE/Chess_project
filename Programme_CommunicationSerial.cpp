@@ -1,148 +1,158 @@
-#include <windows.h>    // For Windows API functions and structures (e.g., CreateFileA, DCB, COMMTIMEOUTS)
-#include <iostream>     // For std::cout, std::cerr, std::endl
-#include <string>       // For std::string and std::stoi
-#include <cstdio>       // For printf (if you're using printf alongside std::cout)
-#include <stdexcept>    // For exception handling in case of std::stoi failure
+#include <windows.h> // Include Windows-specific header for serial communication
+
+#include <iostream>
+#include <fcntl.h>
+
+#include <unistd.h>
+#include <cstring>
+#include<vector>
+#include <algorithm>
+
+#include <chrono>
+#include <thread>
 
 
-
-
-
-std::string UserInput(){
-    std::string  message;
-    std::cout<<"Veuillez ecrire une position a faire bouger le pion"<<std::endl; 
-    std::cin>> message;
-    return message;
-    
-}
-unsigned char EncodeMessage(const std::string& dataToSend) {
+unsigned char EncodeMessage(const unsigned char dataToSend,unsigned char Etat) {
     unsigned char messageToSend = 0;
-    //int NumBobine= std::stoi(dataToSend.substr(1)) & 0x7F;
-
-    switch (dataToSend[0]) {
-        case 'A':  // Activate the coil
-            messageToSend = (1 << 7) | (std::stoi(dataToSend.substr(1)) & 0x7F);
-            break;
-
-        case 'D':  // Deactivate the coil
-            messageToSend = (std::stoi(dataToSend.substr(1)) & 0x7F);
-            break;
-
-        default:
-            std::cerr << "Invalid state!" << std::endl;
-            break;
-    }
-
+    messageToSend = (Etat << 7) | (dataToSend&0x7F);
     return messageToSend;
 }
 
 
+const std::vector<unsigned char> EncodeMessageToArray(const unsigned char UserData[]) {
+    std::vector<unsigned char> msgVector;
+    int PositionI = UserData[0];
+    int PositionF = UserData[1];
+    bool inverse = false;
+
+    if(UserData[0]==UserData[1]){
+        msgVector.push_back((unsigned char) 0);
+        return msgVector;
+    }
+
+    if (UserData[0] > UserData[1]) {
+        PositionI = UserData[1];
+        PositionF = UserData[0];
+        inverse = true;
+    }
+
+    for (int i = PositionI; i <= PositionF; i++) {
+        msgVector.push_back(EncodeMessage(i, 1)); // Add encoded message to the vector
+    }
+
+    if (inverse) {
+        std::reverse(msgVector.begin(), msgVector.end());
+    }
+
+    return msgVector;
+}
 
 
 
 
-int main(void)
-{
-    HANDLE hSerial;
-    DCB dcbSerialParams = {0};
-    COMMTIMEOUTS timeouts = {0};
-    DWORD bytesWritten = 0;
-    DWORD bytesRead = 0;
+int CommunicationSerie(unsigned char* UserInput) {
+    if (UserInput[0] != UserInput[1]) {
+        HANDLE hSerial;
+        DWORD bytesWritten, bytesRead;
+        char readBuffer[256] = {0};
+        unsigned char messageToSend;
 
-    char readBuffer[256] = {0}; // Buffer de lecture
-    std::string messageUser;
-    unsigned char messageToSend ; // messageToSend a envoyer (unsigned char)
-
-
-    // 1. Ouvrir le port COM
-    // Le prefixe "\\\\.\\COM1" est necessaire pour pouvoir ouvrir un port serie 
-    // sous Windows lorsqu'on utilise CreateFile.
-    hSerial = CreateFileA(
-        "\\\\.\\COM7",               // Nom du port (a adapter a votre configuration)
+        // Open the serial port
+        hSerial = CreateFileA(
+        "\\\\.\\COM12",               // Nom du port (a adapter a votre configuration)
         GENERIC_READ | GENERIC_WRITE,// Acces en lecture et ecriture
         0,                           // Partage non autorise
         NULL,                        // Securite par defaut
         OPEN_EXISTING,               // On ouvre un port existant
         0,                           // Aucun attribut particulier
-        NULL                         // Pas d'utilisation d'un template
-    );
+        NULL                         // Pas d'utilisation d'un template                    // Null template
+        );
 
+        if (hSerial == INVALID_HANDLE_VALUE) {
+            std::cerr << "Error: Unable to open the serial port. Check the COM port." << std::endl;
+            return 1;
+        }
 
+        // Configure serial port settings
+        DCB dcbSerialParams = {0};
+        dcbSerialParams.DCBlength = sizeof(dcbSerialParams);
 
+        if (!GetCommState(hSerial, &dcbSerialParams)) {
+            std::cerr << "Error: Unable to get serial port state." << std::endl;
+            CloseHandle(hSerial);
+            return 1;
+        }
 
-    if (hSerial == INVALID_HANDLE_VALUE)
-    {
-        printf("Erreur: Impossible d'ouvrir le port COM.\n");
-        return 1;
-    }
+        dcbSerialParams.BaudRate = CBR_9600;  // Baud rate: 9600
+        dcbSerialParams.ByteSize = 8;        // Data bits: 8
+        dcbSerialParams.StopBits = ONESTOPBIT;
+        dcbSerialParams.Parity   = NOPARITY;
 
-    // 2. Configurer les parametres du port (baud rate, bits de donnees, parite, etc.)
-    dcbSerialParams.DCBlength = sizeof(dcbSerialParams);
+        if (!SetCommState(hSerial, &dcbSerialParams)) {
+            std::cerr << "Error: Unable to configure serial port settings." << std::endl;
+            CloseHandle(hSerial);
+            return 1;
+        }
 
-    if (!GetCommState(hSerial, &dcbSerialParams))
-    {
-        printf("Erreur: GetCommState a echoue.\n");
+        // Set timeouts
+        COMMTIMEOUTS timeouts = {0};
+        timeouts.ReadIntervalTimeout = 50;         // Max time between two bytes
+        timeouts.ReadTotalTimeoutConstant = 50;    // Total timeout for read
+        timeouts.ReadTotalTimeoutMultiplier = 10;  // Multiplier for read
+        timeouts.WriteTotalTimeoutConstant = 50;   // Total timeout for write
+        timeouts.WriteTotalTimeoutMultiplier = 10; // Multiplier for write
+
+        if (!SetCommTimeouts(hSerial, &timeouts)) {
+            std::cerr << "Error: Unable to configure timeouts." << std::endl;
+            CloseHandle(hSerial);
+            return 1;
+        }
+
+        // Send and receive data
+        for (unsigned char x : EncodeMessageToArray(UserInput)) {
+            messageToSend = x;
+
+            // Write to the serial port
+            if (!WriteFile(hSerial, &messageToSend, sizeof(messageToSend), &bytesWritten, NULL)) {
+                std::cerr << "Error: Unable to write to the serial port." << std::endl;
+                CloseHandle(hSerial);
+                return 1;
+            }
+
+            std::cout << "Message sent (unsigned char): 0x" << std::hex << static_cast<int>(messageToSend) << std::endl;
+
+            // Read from the serial port
+            if (!ReadFile(hSerial, readBuffer, sizeof(readBuffer) - 1, &bytesRead, NULL)) {
+                std::cerr << "Error: Unable to read from the serial port." << std::endl;
+                CloseHandle(hSerial);
+                return 1;
+            }
+
+            // Null-terminate the received string
+            if (bytesRead > 0) {
+                readBuffer[bytesRead] = '\0';
+                std::cout << "Response received: " << readBuffer << std::endl;
+            }
+
+            // Wait 1 second before the next iteration
+            Sleep(1000); // Use Sleep (milliseconds) for Windows
+        }
+
+        // Close the serial port
         CloseHandle(hSerial);
-        return 1;
     }
-
-    // Exemple de configuration: 9600 bauds, 8N1
-    dcbSerialParams.BaudRate = CBR_9600;  // Vitesse: 9600 bauds
-    dcbSerialParams.ByteSize = 8;         // 8 bits de donnees
-    dcbSerialParams.StopBits = ONESTOPBIT;// 1 bit de stop
-    dcbSerialParams.Parity   = NOPARITY;  // Sans parite
-
-    if (!SetCommState(hSerial, &dcbSerialParams))
-    {
-        printf("Erreur: SetCommState a echoue.\n");
-        CloseHandle(hSerial);
-        return 1;
-    }
-
-    // 3. Configurer les timeouts (delais de lecture/ecriture)
-    timeouts.ReadIntervalTimeout         = 50;  // Intervalle max entre deux caracteres
-    timeouts.ReadTotalTimeoutConstant    = 50;  // Delai constant de lecture
-    timeouts.ReadTotalTimeoutMultiplier  = 10;  // Multiplicateur de delai de lecture par octet
-    timeouts.WriteTotalTimeoutConstant   = 50;  // Delai constant d'ecriture
-    timeouts.WriteTotalTimeoutMultiplier = 10;  // Multiplicateur de delai d'ecriture par octet
-
-    if (!SetCommTimeouts(hSerial, &timeouts))
-    {
-        printf("Erreur: SetCommTimeouts a echoue.\n");
-        CloseHandle(hSerial);
-        return 1;
-    }
-while(messageUser!="C"){
-
-    messageUser=UserInput();
-    messageToSend=EncodeMessage(messageUser);
-
-    // 4. ecriture dans le port COM
-    if (!WriteFile(hSerial, &messageToSend, sizeof(messageToSend), &bytesWritten, NULL))
-    {
-        printf("Erreur: Impossible d'ecrire sur le port COM.\n");
-        CloseHandle(hSerial);
-        return 1;
-    }
-
-    printf("messageToSend envoye (unsigned char): 0x%X\n", messageToSend);
-
-    // 5. Lecture de la reponse
-    if (!ReadFile(hSerial, readBuffer, sizeof(readBuffer) - 1, &bytesRead, NULL))
-    {
-        printf("Erreur: Impossible de lire la reponse.\n");
-        CloseHandle(hSerial);
-        return 1;
-    }
-
-    // On s'assure de terminer la chaîne reçue par un caractere nul
-    readBuffer[bytesRead] = '\0';
-    printf("Reponse reçue: %s\n", readBuffer);
-    
-}
-
-    // 6. Fermer le port
-    CloseHandle(hSerial);
 
     return 0;
+}
+
+int main() {
+
+
+    unsigned char userI[2];
+    userI[0]= (unsigned char ) 1;
+    userI[1]= (unsigned char ) 2;
+
+
+    CommunicationSerie(userI);
+ 
 }
