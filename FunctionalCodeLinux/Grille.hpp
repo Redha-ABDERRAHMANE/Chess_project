@@ -6,14 +6,16 @@
 #include <sigc++/sigc++.h>
 #include "Piece.hpp"
 #include "Case.hpp" // Inclure la définition de Case
-
-class Grille : public Gtk::DrawingArea
+#include "ClassCommunicationSerie.hpp"
+class Grille : public Gtk::DrawingArea, public:: ClassCommunicationSerie
 {
 private:
     // Propriétés
     int rows, cols;
     std::vector<std::vector<Case>> grid;  // Utiliser Case au lieu de la structure Cell
     int cellSize;
+    ClassCommunicationSerie CommunicationObject;
+
 
 public:
     // Constructeur
