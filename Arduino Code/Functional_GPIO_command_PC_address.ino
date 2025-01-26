@@ -1,6 +1,6 @@
 
 
-#define Delais 1000  // Délai en millisecondes
+#define Delais 500 // Délai en millisecondes
 // Pin D2 .. D5 : index de la bobine
 // Pin D6 D7 : donnee de selection pour MUX1
 // Pin D8: non utilisé
@@ -84,19 +84,9 @@ void loop() {
     if (Serial.available() > 0) {  // Vérifie s'il y a des données sur l'interface série
         unsigned char receivedData = Serial.read();  // Lire les données comme une chaîne de caractères
 
-        // Extraire le premier caractère comme état
-        unsigned char Next_etat = receivedData>>7;
-          Serial.print(receivedData);
-
-
-
-        // Attendre un délai avant d'exécuter la commande
-        delay(Delais);
-
-        // Appeler la fonction setBobine
+        // Appelerles fonctions qui activent les bobines puis les desactiver après un delais
         activerBroche(receivedData);
-
-        delay(3000);
+        delay(Delais);
         desactiverBroche() ;
     }
 }
