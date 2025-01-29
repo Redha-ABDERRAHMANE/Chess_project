@@ -4,7 +4,7 @@ The first semester project aims to build a playable chess game where the user in
 
 The project is divided into three blocks:
 
-![Schema du projet](./Illustration/illustration1.jpg)
+![Schema du projet](Illustrations/Illustration1.jpg)
 
 ## 1) HMI (Human-Machine Interface)
 Building a GUI with the chessboard and pieces where the user can play and view the results of their inputs.
