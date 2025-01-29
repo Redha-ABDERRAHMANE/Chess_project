@@ -44,4 +44,4 @@ Since there are more coils than available pins on the board, we've decided to us
 
 ### Demux Circuit Diagram
 
-![Demux Circuit](Illustration/illustration2.png)
+![Demux Circuit](Illustrations/illustration2.png)
