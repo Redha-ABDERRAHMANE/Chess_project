@@ -39,7 +39,7 @@ The board receives a byte message (8 bits):
   - The remaining bits are used for the coil number.
 
 Since there are more coils than available pins on the board, we've decided to use a shield made of three demuxes:
-- The first mux serves as a driver to determine which demux should be on.
+- The first demux serves as a driver to determine which demux should be on.
 - The latter demuxes are connected to 15 coils each.
 
 ### Demux Circuit Diagram
