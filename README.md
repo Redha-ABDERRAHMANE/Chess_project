@@ -26,7 +26,7 @@ When a user decides to move a piece, the array returned by the HMI will be analy
 
 The encoding is done by taking the position, which represents the coil's number (coils are numbered from 1 to 33), then converting the number into bits. The MSB is set to 1 if the coil is to be activated (otherwise, it's 0).
 
-The function responsible for sending the data must send the activation message of each coil. Each message is delayed by 500ms (an arbitrary value) before sending the next one.
+The function responsible for sending the data must send the activation message of each coil. Each message is delayed by 100ms (an arbitrary value) before sending the next one.
 
 ## 3) Arduino Code on STM32
 
