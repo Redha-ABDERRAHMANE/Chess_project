@@ -33,7 +33,7 @@ The function responsible for sending the data must send the activation message o
 The code is fairly simple. Using the included Serial library, we read the message received from the PC and send each bit value to a different pin. The used pins are GPIO only.
 
 The board receives a byte message (8 bits):
-- The MSB bit serves as a `next_state` value of the coil.
+- The MSB bit serves as a next state value of the coil.
 - The rest are used as the address of the coil:
   - Bits 5 and 6 are used as the address for the demux.
   - The remaining bits are used for the coil number.
