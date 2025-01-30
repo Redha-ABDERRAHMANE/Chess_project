@@ -1,6 +1,4 @@
 #include"ClassCommunicationSerie.hpp"
-#include<bitset>
-
 // Encode un seul message en combinant l'état et les données à envoyer
 unsigned char ClassCommunicationSerie::EncodeMessage(const unsigned char dataToSend, unsigned char Etat) {
     return (Etat << 7) | (dataToSend & 0x7F); // Décale l'état sur le bit de poids fort et garde les 7 bits de data
@@ -18,7 +16,7 @@ std::vector<int> FindIndex(const unsigned char target, const std::vector<std::ve
         if (iteration != matrix[row].end()) { // Si on n'arrive pas à la fin du vecteur alors nous avons trouvé la colonne et la ligne de la bobine
             colIndex = std::distance(matrix[row].begin(), iteration); // Calculer la colonne en faisant la difference entre l'iterateur au debut et l'iterateur it
             rowIndex = row;
-            break; // Stop when found
+            break; //On arrete la boucle for dès qu'on trouve la colonne et la ligne liées à la position de la bobine
         }
     }
     return {rowIndex, colIndex};
@@ -32,8 +30,8 @@ const std::vector<unsigned char> ClassCommunicationSerie::EncodeMessageToArray(c
     std::vector<std::vector<int>> matrix = {
         {1,  2,  3,  4,  5,  6,  7},
         {8,  0,  0,  9,  0,  0,  10},
-        {11, 0,  0,  12, 0,  0,  13},
-        {14, 15, 16, 17, 18, 19, 20},
+        {11, 0,  0,  12, 0,  0,  13},       // ATTENTION: Cette matrice peut varier, cela depend de votre preference
+        {14, 15, 16, 17, 18, 19, 20},       //Mais il faut changer le calcul de position dans la fonction position dans Grille.cpp
         {21, 0,  0,  22, 0,  0,  23},
         {24, 0,  0,  25, 0,  0,  26},
         {27, 28, 29, 30, 31, 32, 33}
