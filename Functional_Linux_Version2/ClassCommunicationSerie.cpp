@@ -1,4 +1,5 @@
 #include"ClassCommunicationSerie.hpp"
+#include<bitset>
 // Encode un seul message en combinant l'état et les données à envoyer
 unsigned char ClassCommunicationSerie::EncodeMessage(const unsigned char dataToSend, unsigned char Etat) {
     return (Etat << 7) | (dataToSend & 0x7F); // Décale l'état sur le bit de poids fort et garde les 7 bits de data
