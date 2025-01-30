@@ -19,7 +19,7 @@ std::vector<int> FindIndex(const unsigned char target, const std::vector<std::ve
             break; //On arrete la boucle for dès qu'on trouve la colonne et la ligne liées à la position de la bobine
         }
     }
-    return {rowIndex, colIndex};
+    return {rowIndex, colIndex}; // On retourne un vecteur avec la ligne et la colonne de la bobine 
 }
 
 const std::vector<unsigned char> ClassCommunicationSerie::EncodeMessageToArray(const unsigned char UserData[]) {
@@ -75,7 +75,7 @@ const std::vector<unsigned char> ClassCommunicationSerie::EncodeMessageToArray(c
             }
         }
     }
-    // Cas où le mouvement est diagonal ou mixte (chemin combiné vertical et horizontal)
+    // Cas où le mouvement est mixte (chemin combiné vertical et horizontal)
     else {
         int row = PositionI[0];
         int col = PositionI[1];
