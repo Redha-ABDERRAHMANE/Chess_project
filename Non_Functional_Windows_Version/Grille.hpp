@@ -15,7 +15,7 @@ private:
     int rows, cols;
     std::vector<std::vector<Case>> grid;  // Utiliser Case au lieu de la structure Cell
     int cellSize;
-    ClassCommunicationSerial CommunicationObject;
+    static ClassCommunicationSerial CommunicationObject;
 
 public:
     // Constructeur
