@@ -46,7 +46,7 @@ void setAddress(unsigned char address, bool d) {
 
 
     // Configurer les broches a1 à a6 en fonction de l'adresse (6 bits)
-    digitalWrite(GPIO[0], (address & 0x01));      //Envoie le Bit 0 de address à la broche A1_PIN
+    digitalWrite(GPIO[0], (address & 0x01));      //Envoie le Bit 0 au GPIO[0]
     digitalWrite(GPIO[1], (address & 0x02) >> 1); // Bit 1 au GPIO[1]
     digitalWrite(GPIO[2], (address & 0x04) >> 2); // Bit 2 au GPIO[2]
     digitalWrite(GPIO[3], (address & 0x08) >> 3); // Bit 3 au GPIO[3]
