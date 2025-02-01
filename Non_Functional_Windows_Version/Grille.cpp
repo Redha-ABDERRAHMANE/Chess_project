@@ -1,5 +1,7 @@
 #include "Grille.hpp"
 #include <iostream>
+
+ClassCommunicationSerial Grille::CommunicationObject;
 Grille::Grille(int r, int c, int cellSize)
     :  rows(r), cols(c), grid(r, std::vector<Case>(c, Case())), cellSize(cellSize)
 {

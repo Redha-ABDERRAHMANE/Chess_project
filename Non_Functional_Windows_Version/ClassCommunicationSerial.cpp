@@ -58,21 +58,8 @@ int ClassCommunicationSerial::CommunicationSerie(unsigned char* UserInput) {
             // Affiche le message envoyé
             std::cout << "Message sent (unsigned char):" << std::hex << static_cast<int>(messageToSend) << std::endl;
 
-            // Lecture des données depuis le port série
-            if (!ReadFile(this->hSerial, this->readBuffer, sizeof(this->readBuffer) - 1, &this->bytesRead, NULL)) {
-                std::cerr << "Error: Unable to read from the serial port." << std::endl;
-                CloseHandle(this->hSerial);
-                return 1;
-            }
-
-            // Termine la chaîne lue avec un caractère nul
-            if (this->bytesRead > 0) {
-                this->readBuffer[this->bytesRead] = '\0';
-                std::cout << "Response received: " << this->readBuffer << std::endl;
-            }
-
             // Attente d'une seconde avant la prochaine itération
-            Sleep(1000); // Utilise Sleep (en millisecondes) pour Windows
+            Sleep(100); // Utilise Sleep (en millisecondes) pour Windows
         }
     }
 

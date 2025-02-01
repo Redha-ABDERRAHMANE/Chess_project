@@ -25,7 +25,7 @@ public:
     ClassCommunicationSerial() {
         // Ouvre le port série
         hSerial = CreateFileA(
-            "\\\\.\\COM2",               // Nom du port (doit correspondre à votre configuration)
+            "\\\\.\\COM12",               // Nom du port (doit correspondre à votre configuration)
             GENERIC_READ | GENERIC_WRITE, // Accès en lecture et écriture
             0,                           // Pas de partage
             NULL,                        // Sécurité par défaut
