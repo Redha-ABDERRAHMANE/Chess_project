@@ -29,9 +29,7 @@ void addToVector(const std::vector<std::vector<int>>& matrix,std::vector<int>& c
 
         if (matrix[row][col] != 0) { // On ignore les cases vides (0)
         chemin.push_back(matrix[row][col]); // Ajouter la position au chemin
-    }
-    
-
+    } 
 }
 const std::vector<unsigned char> ClassCommunicationSerie::EncodeMessageToArray(const unsigned char UserData[]) {
     std::vector<unsigned char> msgVector; // Initialise un vecteur pour stocker les messages encodés
@@ -89,9 +87,7 @@ const std::vector<unsigned char> ClassCommunicationSerie::EncodeMessageToArray(c
 
         // Boucle jusqu'à ce qu'on atteigne la position finale
         while (row != PositionF[0] || col != PositionF[1]) {
-            if (matrix[row][col] != 0) { // Vérifier que la position est valide
-                chemin.push_back(matrix[row][col]); // Ajouter au chemin
-            }
+            addToVector(matrix,chemin,row,col); // Ajouter la position au chemin
 
             // Ajustement de la ligne (déplacement vertical)
             while(row!=PositionF[0]){
