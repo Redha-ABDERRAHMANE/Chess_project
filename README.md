@@ -1,10 +1,10 @@
 # First Semester Project: Playable Chess Game with STM32 Nucleo L476RG
 
 Final Versions of the project:
--Functional_Linux_Version (snake-like movement)
--Functional_Linux_Version2 (horizontal,vertical and diagonal movement)
--Functional_Linux_Version3 (horizontal and vertical movement only)
--Non_Functional_Windows_Version.
+- Functional_Linux_Version (snake-like movement)
+- Functional_Linux_Version2 (horizontal,vertical and diagonal movement)
+- Functional_Linux_Version3 (horizontal and vertical movement only)
+- Non_Functional_Windows_Version.
 
 The first semester project aims to build a playable chess game where the user interacts solely with the software on the PC and can watch their movement decisions being played in real time on a real chessboard connected to an STM32 Nucleo L476RG.
 
